@@ -8,93 +8,135 @@
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <style>
         :root {
-            --primary: #2B2851;
-            --secondary: #6E44FF;
-            --accent: #00E4D7;
-            --gradient: linear-gradient(135deg, #6E44FF 0%, #00E4D7 100%);
+            --page-bg: #000;
+            --card-bg: #141414;
+            --primary: #7074F5;
+            --card-hover: #1E1E1E;
+            --text: #fff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu;
-            background: var(--primary);
-            margin: 0;
+            background: var(--page-bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             min-height: 100vh;
-            color: white;
-            background-image: 
-                radial-gradient(circle at 20% 20%, rgba(110, 68, 255, 0.4) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 228, 215, 0.4) 0%, transparent 50%);
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 390px;
+        .app {
+            max-width: 480px;
             margin: 0 auto;
-            padding: 40px 20px;
-            text-align: center;
+            padding: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            margin-bottom: 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo img {
+            width: 32px;
+            height: 32px;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: var(--card-bg);
             border-radius: 24px;
-            padding: 30px;
-            margin: 20px 0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 24px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 40px;
-            background: var(--gradient);
+        .card:hover {
+            background: var(--card-hover);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            background: linear-gradient(91.53deg, #7074F5 0%, #9181F5 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        #connect-container {
-            margin: 20px auto;
-            width: 100%;
-            min-height: 45px;
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 24px;
         }
 
-        #claim-section {
-            margin-top: 20px;
-            display: none;
+        #connect-container {
+            margin: 16px 0;
         }
 
         button {
-            background: var(--gradient);
-            color: white;
-            border: none;
-            padding: 16px 32px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
             width: 100%;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 16px rgba(110, 68, 255, 0.2);
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(91.53deg, #7074F5 0%, #9181F5 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
         }
 
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 20px rgba(110, 68, 255, 0.3);
+            opacity: 0.9;
         }
 
-        .logo {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 4px 8px rgba(0, 228, 215, 0.3));
+        .glow {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(112, 116, 245, 0.1) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="assets/icon.png" alt="TON" class="logo">
-        <h1>TON Mini App</h1>
-        <div class="card">
+    <div class="glow"></div>
+    <div class="app">
+        <header class="header">
+            <div class="logo">
+                <img src="assets/icon.png" alt="TON">
+                <span>TON Mini App</span>
+            </div>
             <div id="connect-container"></div>
-            <div id="claim-section">
+        </header>
+
+        <div class="card">
+            <h2 class="card-title">TON Token Al</h2>
+            <p class="card-description">
+                Cüzdanını bağla ve 0.25 TON token kazan. Hemen başlamak için cüzdanını bağla.
+            </p>
+            <div id="claim-section" style="display:none;">
                 <button onclick="claimTokens()" id="claim-button">
                     0.25 TON Al
                 </button>
