@@ -4,109 +4,64 @@
     <base href="https://hasan199191.github.io/my-ton-app/">
     <meta charset="utf-8">
     <title>PAWS TON | Home</title>
-    <meta name="description" content="Animals are done! It's PAWS Season">
-    <meta name="viewport" content="width=device-width, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
-    <meta property="og:title" content="PAWS TON | Home">
-    <meta property="og:description" content="Animals are done! It's PAWS Season">
-    <meta property="og:image" content="https://paws.community/static/page-preview.png">
-    <meta property="theme-color" content="#0D0D0D">
-    
-    <!-- Icons -->
-    <link rel="icon" href="assets/favicon.ico">
-    <link rel="icon" href="assets/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" href="assets/icons/72.png" sizes="72x72">
-    <link rel="icon" href="assets/icons/96.png" sizes="96x96">
-    <link rel="icon" href="assets/icons/144.png" sizes="144x144">
-    <link rel="icon" href="assets/icons/192.png" sizes="192x192">
-    <link rel="apple-touch-icon" href="assets/icons/512.png" sizes="512x512">
-
-    <!-- Preload Images -->
-    <link rel="preload" as="image" href="assets/shape1.png">
-    <link rel="preload" as="image" href="assets/shape2.png">
-    <link rel="preload" as="image" href="assets/shape3.png">
-    <link rel="preload" as="image" href="assets/shape4.png">
-
-    <!-- After preload images, add navbar styles -->
     <style>
-        @charset "UTF-8";
         :root {
             --primary-color: #FF6B6B;
             --background: #0D0D0D;
             --text: #ffffff;
         }
 
-        body {
-            margin: 0;
+        .verify-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
             background: var(--background);
             color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 2rem;
         }
 
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            overflow: hidden;
+        .verify-title {
+            font-size: 3rem;
+            margin-bottom: 2rem;
         }
 
-        .shape {
-            position: absolute;
-            pointer-events: none;
+        .verify-description {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 3rem;
         }
 
-        .shape1 { top: 0; left: 0; }
-        .shape2 { top: 20%; right: 0; }
-        .shape3 { bottom: 20%; left: 0; }
-        .shape4 { bottom: 0; right: 0; }
-
-        /* Add to existing styles */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .wallet-button {
             padding: 1rem 2rem;
-            background: rgba(13, 13, 13, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-        }
-
-        .wallet-container {
-            margin-left: auto;
-            padding: 0.5rem;
-            background: rgba(255, 255, 255, 0.1);
+            font-size: 1.1rem;
             border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        #ton-connect-button {
-            display: block !important;
+        .wallet-button:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
 <body>
-    <!-- Add navbar as first element in body -->
-    <nav class="navbar">
-        <img src="assets/logo.png" alt="PAWS TON" height="40">
-        <div class="wallet-container">
-            <div id="ton-connect-button"></div>
-        </div>
-    </nav>
+    <section class="verify-section">
+        <h1 class="verify-title">Verify Yourself</h1>
+        <p class="verify-description">Connect your TON wallet to verify your identity and access exclusive features.</p>
+        <div class="wallet-button" id="ton-connect-button"></div>
+    </section>
 
-    <div class="hero">
-        <img src="assets/shape1.png" class="shape shape1" alt="">
-        <img src="assets/shape2.png" class="shape shape2" alt="">
-        <img src="assets/shape3.png" class="shape shape3" alt="">
-        <img src="assets/shape4.png" class="shape shape4" alt="">
-        
-        <!-- Your existing content -->
-    </div>
-
-    <!-- Load TON Connect scripts -->
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/ton-inpage-provider@0.1.30/dist/index.min.js"></script>
     <script>
+        const CONTRACT_ADDRESS = "EQA0i8-CdGnF_DhUHHf92R1ONH6sIA9vLZ_WLcCIhfBBXwtG";
+
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 if (window.TONConnect) {
@@ -114,8 +69,28 @@
                         manifestUrl: 'https://hasan199191.github.io/my-ton-app/tonconnect-manifest.json',
                         buttonRootId: 'ton-connect-button'
                     });
-                } else {
-                    console.error("TONConnect not loaded");
+
+                    // Handle wallet connection
+                    tonConnectUI.onStatusChange(async (wallet) => {
+                        if (wallet) {
+                            try {
+                                // Initialize contract
+                                const provider = window.ton;
+                                const contract = new provider.Contract({
+                                    address: CONTRACT_ADDRESS,
+                                    // Add your contract ABI here
+                                });
+
+                                // Call contract method
+                                await contract.methods.verify().send({
+                                    from: wallet.account.address,
+                                    amount: '0.1', // TON amount
+                                });
+                            } catch (error) {
+                                console.error("Contract interaction failed:", error);
+                            }
+                        }
+                    });
                 }
             }, 1000);
         });
