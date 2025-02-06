@@ -1,5 +1,4 @@
 app/index.html
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,13 +8,28 @@ app/index.html
     <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tonclient/core@1.28.0/dist/tonclient.js"></script>
     <style>
-        .wallet-status {
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(45deg, #7074F5, #8F95FF);
+            font-family: system-ui, sans-serif;
+        }
+
+        .container {
+            text-align: center;
             color: white;
+            padding: 2rem;
+        }
+
+        .wallet-status {
             margin: 1rem 0;
             font-size: 0.9rem;
         }
 
-        .connect-btn {
+        .connect-btn, .send-btn {
             background: white;
             color: #7074F5;
             padding: 1rem 2rem;
@@ -24,21 +38,24 @@ app/index.html
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
+            margin: 0.5rem;
         }
 
-        .connect-btn:hover {
+        .connect-btn:hover, .send-btn:hover {
             transform: translateY(-2px);
+        }
+
+        .send-btn {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="content">
-            <h1>PAWS</h1>
-            <p class="description">Connect your TON wallet to continue</p>
-            <div id="walletStatus" class="wallet-status"></div>
-            <button id="connectBtn" class="connect-btn">Connect TON Wallet</button>
-        </div>
+    <div class="container">
+        <h1>PAWS</h1>
+        <div id="walletStatus" class="wallet-status">Please connect your wallet</div>
+        <button id="connectBtn" class="connect-btn">Connect TON Wallet</button>
+        <button id="sendBtn" class="send-btn">Send 0.25 TON</button>
     </div>
 
     <script>
@@ -54,24 +71,43 @@ app/index.html
                 if (wallet) {
                     document.getElementById('walletStatus').textContent = 'Connected: ' + wallet.account.address;
                     document.getElementById('connectBtn').style.display = 'none';
+                    document.getElementById('sendBtn').style.display = 'inline-block';
                 } else {
                     document.getElementById('walletStatus').textContent = 'Disconnected';
-                    document.getElementById('connectBtn').style.display = 'block';
+                    document.getElementById('connectBtn').style.display = 'inline-block';
+                    document.getElementById('sendBtn').style.display = 'none';
                 }
             });
         }
 
+        async function sendTransaction() {
+            if (!connector.connected) {
+                alert('Please connect wallet first');
+                return;
+            }
+
+            try {
+                const transaction = {
+                    to: CONTRACT_ADDRESS,
+                    value: '250000000', // 0.25 TON
+                    data: 'te6ccgEBAQEAAgAAAA=='
+                };
+
+                await connector.sendTransaction(transaction);
+            } catch (e) {
+                console.error('Transaction failed:', e);
+            }
+        }
+
         document.getElementById('connectBtn').addEventListener('click', async () => {
             try {
-                const walletConnectionSource = {
-                    jsBridgeKey: 'ton_wallet'
-                };
-                await connector.connect(walletConnectionSource);
+                await connector.connect();
             } catch (e) {
                 console.error('Connection failed:', e);
-                document.getElementById('walletStatus').textContent = 'Connection failed';
             }
         });
+
+        document.getElementById('sendBtn').addEventListener('click', sendTransaction);
 
         initWallet();
     </script>
