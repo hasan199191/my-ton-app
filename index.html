@@ -26,6 +26,7 @@
     <link rel="preload" as="image" href="https://paws.community/_next/static/media/shape3.dbfda191.png">
     <link rel="preload" as="image" href="https://paws.community/_next/static/media/shape4.3f7a27ad.png">
 
+    <!-- After preload images, add navbar styles -->
     <style>
         @charset "UTF-8";
         :root {
@@ -80,12 +81,23 @@
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.1);
         }
+
+        .wallet-container {
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        #ton-connect-button {
+            display: block !important;
+        }
     </style>
 </head>
 <body>
+    <!-- Add navbar as first element in body -->
     <nav class="navbar">
         <img src="assets/logo.png" alt="PAWS TON" height="40">
-        <div class="ton-button">
+        <div class="wallet-container">
             <div id="ton-connect-button"></div>
         </div>
     </nav>
