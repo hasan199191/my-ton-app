@@ -1,79 +1,154 @@
-html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>TON DApp</title>
+    <title>TON Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <style>
         :root {
-            --neon-blue: #00f3ff;
-            --neon-purple: #9d00ff;
-            --dark-bg: #0a0a0a;
+            --primary: #0088CC;
+            --secondary: #31B545;
         }
 
         body {
-            background: var(--dark-bg);
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu;
+            background: #fff;
             margin: 0;
+            padding: 20px;
+            color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
             padding: 20px;
-            background: rgba(10, 10, 10, 0.8);
-            border-radius: 15px;
-            box-shadow: 0 0 20px var(--neon-blue);
-            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         h1 {
-            text-align: center;
-            color: var(--neon-blue);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            animation: glow 1.5s infinite alternate;
+            font-size: 24px;
+            margin-bottom: 24px;
+            color: var(--primary);
         }
 
-        @keyframes glow {
-            from { text-shadow: 0 0 5px var(--neon-blue), 0 0 15px var(--neon-purple); }
-            to { text-shadow: 0 0 10px var(--neon-blue), 0 0 30px var(--neon-purple); }
+        .coin {
+            animation: coinDrop 1s ease-out;
+            margin-bottom: 20px;
+        }
+
+        @keyframes coinDrop {
+            0% {
+                transform: translateY(-100px);
+            }
+            60% {
+                transform: translateY(10px);
+            }
+            80% {
+                transform: translateY(-5px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        #connect-container {
+            margin: 20px 0;
+        }
+
+        #claim-section {
+            margin-top: 20px;
         }
 
         button {
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
-            border: none;
+            background: var(--primary);
             color: white;
-            padding: 15px 30px;
-            border-radius: 5px;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
             cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 20px var(--neon-blue);
+            box-shadow: 0 4px 12px rgba(0,136,204,0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .coin img {
+            width: 64px;
+            height: 64px;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>TON DApp</h1>
+        <div class="coin">
+            <img src="assets/icon.png" alt="TON">
+        </div>
+        <h1>TON Mini App</h1>
         <div id="connect-container"></div>
         <div id="claim-section" style="display:none;">
-            <button onclick="claimTokens()" id="claim-button">0.25 TON Gönder</button>
+            <button onclick="claimTokens()" id="claim-button">
+                0.25 TON Al
+            </button>
         </div>
     </div>
-    ...existing code...
+
+    <script>
+        const webapp = window.Telegram.WebApp;
+        webapp.ready();
+        
+        const tonConnect = new TON_CONNECT_UI.TonConnectUI({
+            manifestUrl: 'https://hasan199191.github.io/my-ton-app/tonconnect-manifest.json',
+            buttonRootId: 'connect-container'
+        });
+
+        tonConnect.onStatusChange(async (wallet) => {
+            const claimSection = document.getElementById('claim-section');
+            if (wallet) {
+                claimSection.style.display = 'block';
+            } else {
+                claimSection.style.display = 'none';
+            }
+        });
+
+        async function claimTokens() {
+            try {
+                const transaction = {
+                    validUntil: Date.now() + 300000,
+                    messages: [
+                        {
+                            address: "EQCBlhS0J_g7MZDJkBIb1mczcvbTmuiHXbi5smTxFWukVF5n",
+                            amount: "250000000"
+                        }
+                    ]
+                };
+
+                const result = await tonConnect.sendTransaction(transaction);
+                webapp.showPopup({
+                    title: 'Başarılı',
+                    message: 'İşlem gönderildi!'
+                });
+            } catch (error) {
+                webapp.showPopup({
+                    title: 'Hata',
+                    message: error.message
+                });
+            }
+        }
+    </script>
 </body>
 </html>
