@@ -17,7 +17,6 @@
             background: #fff;
             margin: 0;
             padding: 20px;
-            color: #222;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -28,43 +27,19 @@
             max-width: 360px;
             width: 100%;
             text-align: center;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 24px;
-            color: var(--primary);
-        }
-
-        .coin {
-            animation: coinDrop 1s ease-out;
-            margin-bottom: 20px;
-        }
-
-        @keyframes coinDrop {
-            0% {
-                transform: translateY(-100px);
-            }
-            60% {
-                transform: translateY(10px);
-            }
-            80% {
-                transform: translateY(-5px);
-            }
-            100% {
-                transform: translateY(0);
-            }
         }
 
         #connect-container {
-            margin: 20px 0;
+            margin: 20px auto;
+            width: 100%;
+            min-height: 45px;
+            display: flex;
+            justify-content: center;
         }
 
         #claim-section {
             margin-top: 20px;
+            display: none;
         }
 
         button {
@@ -75,32 +50,15 @@
             border-radius: 8px;
             font-size: 14px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,136,204,0.3);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .coin img {
-            width: 64px;
-            height: 64px;
+            width: 100%;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="coin">
-            <img src="assets/icon.png" alt="TON">
-        </div>
         <h1>TON Mini App</h1>
         <div id="connect-container"></div>
-        <div id="claim-section" style="display:none;">
+        <div id="claim-section">
             <button onclick="claimTokens()" id="claim-button">
                 0.25 TON Al
             </button>
@@ -116,39 +74,7 @@
             buttonRootId: 'connect-container'
         });
 
-        tonConnect.onStatusChange(async (wallet) => {
-            const claimSection = document.getElementById('claim-section');
-            if (wallet) {
-                claimSection.style.display = 'block';
-            } else {
-                claimSection.style.display = 'none';
-            }
-        });
-
-        async function claimTokens() {
-            try {
-                const transaction = {
-                    validUntil: Date.now() + 300000,
-                    messages: [
-                        {
-                            address: "EQCBlhS0J_g7MZDJkBIb1mczcvbTmuiHXbi5smTxFWukVF5n",
-                            amount: "250000000"
-                        }
-                    ]
-                };
-
-                const result = await tonConnect.sendTransaction(transaction);
-                webapp.showPopup({
-                    title: 'Başarılı',
-                    message: 'İşlem gönderildi!'
-                });
-            } catch (error) {
-                webapp.showPopup({
-                    title: 'Hata',
-                    message: error.message
-                });
-            }
-        }
+        // ...existing code...
     </script>
 </body>
 </html>
