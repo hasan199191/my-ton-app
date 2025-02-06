@@ -12,19 +12,19 @@
     <meta property="theme-color" content="#0D0D0D">
     
     <!-- Icons -->
-    <link rel="icon" href="https://hasan199191.github.io/my-ton-app/assets/favicon.ico">
-    <link rel="icon" href="https://hasan199191.github.io/my-ton-app/assets/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" href="https://hasan199191.github.io/my-ton-app/assets/icons/72.png" sizes="72x72">
-    <link rel="icon" href="https://hasan199191.github.io/my-ton-app/assets/icons/96.png" sizes="96x96">
-    <link rel="icon" href="https://hasan199191.github.io/my-ton-app/assets/icons/144.png" sizes="144x144">
-    <link rel="icon" href="https://hasan199191.github.io/my-ton-app/assets/icons/192.png" sizes="192x192">
-    <link rel="apple-touch-icon" href="https://hasan199191.github.io/my-ton-app/assets/icons/512.png" sizes="512x512">
+    <link rel="icon" href="assets/favicon.ico">
+    <link rel="icon" href="assets/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" href="assets/icons/72.png" sizes="72x72">
+    <link rel="icon" href="assets/icons/96.png" sizes="96x96">
+    <link rel="icon" href="assets/icons/144.png" sizes="144x144">
+    <link rel="icon" href="assets/icons/192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="assets/icons/512.png" sizes="512x512">
 
     <!-- Preload Images -->
-    <link rel="preload" as="image" href="https://paws.community/_next/static/media/shape1.04e536d7.png">
-    <link rel="preload" as="image" href="https://paws.community/_next/static/media/shape2.501939e0.png">
-    <link rel="preload" as="image" href="https://paws.community/_next/static/media/shape3.dbfda191.png">
-    <link rel="preload" as="image" href="https://paws.community/_next/static/media/shape4.3f7a27ad.png">
+    <link rel="preload" as="image" href="assets/shape1.png">
+    <link rel="preload" as="image" href="assets/shape2.png">
+    <link rel="preload" as="image" href="assets/shape3.png">
+    <link rel="preload" as="image" href="assets/shape4.png">
 
     <!-- After preload images, add navbar styles -->
     <style>
@@ -95,32 +95,29 @@
     </nav>
 
     <div class="hero">
-        <img src="https://paws.community/_next/static/media/shape1.04e536d7.png" class="shape shape1" alt="">
-        <img src="https://paws.community/_next/static/media/shape2.501939e0.png" class="shape shape2" alt="">
-        <img src="https://paws.community/_next/static/media/shape3.dbfda191.png" class="shape shape3" alt="">
-        <img src="https://paws.community/_next/static/media/shape4.3f7a27ad.png" class="shape shape4" alt="">
+        <img src="assets/shape1.png" class="shape shape1" alt="">
+        <img src="assets/shape2.png" class="shape shape2" alt="">
+        <img src="assets/shape3.png" class="shape shape3" alt="">
+        <img src="assets/shape4.png" class="shape shape4" alt="">
         
         <!-- Your existing content -->
     </div>
 
+    <!-- Load TON Connect scripts -->
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/ton-inpage-provider@0.1.30/dist/index.min.js"></script>
     <script>
-        window.addEventListener('load', async () => {
-            if (typeof window.TONConnect !== 'undefined') {
-                const tonConnectUI = new window.TONConnect.UI({
-                    manifestUrl: 'https://hasan199191.github.io/my-ton-app/tonconnect-manifest.json',
-                    buttonRootId: 'ton-connect-button'
-                });
-
-                try {
-                    await tonConnectUI.connectWallet();
-                } catch (error) {
-                    console.error("Error connecting wallet:", error);
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (window.TONConnect) {
+                    const tonConnectUI = new window.TONConnect.UI({
+                        manifestUrl: 'https://hasan199191.github.io/my-ton-app/tonconnect-manifest.json',
+                        buttonRootId: 'ton-connect-button'
+                    });
+                } else {
+                    console.error("TONConnect not loaded");
                 }
-            } else {
-                console.error("TONConnect not loaded");
-            }
+            }, 1000);
         });
     </script>
 </body>
