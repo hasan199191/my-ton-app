@@ -57,10 +57,39 @@
         .shape3 { bottom: 20%; left: 0; }
         .shape4 { bottom: 0; right: 0; }
 
-        /* Rest of your existing styles */
+        /* Add to existing styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(13, 13, 13, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        #ton-connect-button {
+            margin-left: auto;
+        }
+
+        /* Style TON Connect button wrapper */
+        .ton-button {
+            padding: 0.5rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body>
+    <nav class="navbar">
+        <img src="assets/logo.png" alt="PAWS TON" height="40">
+        <div class="ton-button">
+            <div id="ton-connect-button"></div>
+        </div>
+    </nav>
+
     <div class="hero">
         <img src="https://paws.community/_next/static/media/shape1.04e536d7.png" class="shape shape1" alt="">
         <img src="https://paws.community/_next/static/media/shape2.501939e0.png" class="shape shape2" alt="">
@@ -70,6 +99,43 @@
         <!-- Your existing content -->
     </div>
 
-    <!-- Rest of your existing HTML -->
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ton-inpage-provider@0.1.30/dist/index.min.js"></script>
+    <script>
+        const tonConnectUI = new TONConnect.UI({
+            manifestUrl: 'https://hasan199191.github.io/my-ton-app/tonconnect-manifest.json',
+            buttonRootId: 'ton-connect-button'
+        });
+
+        // Contract address and interface
+        const CONTRACT_ADDRESS = "EQA0i8-CdGnF_DhUHHf92R1ONH6sIA9vLZ_WLcCIhfBBXwtG";
+        
+        // Initialize wallet and contract interaction
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Connect wallet
+                await tonConnectUI.connectWallet();
+                
+                // Initialize contract
+                const provider = window.ton;
+                if (provider) {
+                    const contract = new provider.Contract({
+                        address: CONTRACT_ADDRESS,
+                        // Add your contract ABI here
+                    });
+
+                    // Listen for wallet connection
+                    tonConnectUI.onStatusChange(async (wallet) => {
+                        if (wallet) {
+                            console.log("Wallet connected:", wallet.account.address);
+                            // Add your contract interaction logic here
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Error initializing:", error);
+            }
+        });
+    </script>
 </body>
 </html>
