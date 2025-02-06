@@ -1,137 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <base href="https://hasan199191.github.io/my-ton-app/">
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
     <title>PAWS TON | Home</title>
     <meta name="description" content="Animals are done! It's PAWS Season">
+    <meta name="viewport" content="width=device-width, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
     <meta property="og:title" content="PAWS TON | Home">
     <meta property="og:description" content="Animals are done! It's PAWS Season">
     <meta property="og:image" content="https://paws.community/static/page-preview.png">
+    <meta property="theme-color" content="#0D0D0D">
+    
+    <!-- Icons -->
+    <link rel="icon" href="assets/favicon.ico">
+    <link rel="icon" href="assets/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" href="assets/icons/72.png" sizes="72x72">
+    <link rel="icon" href="assets/icons/96.png" sizes="96x96">
+    <link rel="icon" href="assets/icons/144.png" sizes="144x144">
+    <link rel="icon" href="assets/icons/192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="assets/icons/512.png" sizes="512x512">
+
+    <!-- Preload Images -->
+    <link rel="preload" as="image" href="https://paws.community/_next/static/media/shape1.04e536d7.png">
+    <link rel="preload" as="image" href="https://paws.community/_next/static/media/shape2.501939e0.png">
+    <link rel="preload" as="image" href="https://paws.community/_next/static/media/shape3.dbfda191.png">
+    <link rel="preload" as="image" href="https://paws.community/_next/static/media/shape4.3f7a27ad.png">
+
     <style>
+        @charset "UTF-8";
         :root {
             --primary-color: #FF6B6B;
-            --text-color: #333;
-            --bg-color: #f8f9fa;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            --background: #0D0D0D;
+            --text: #ffffff;
         }
 
         body {
+            margin: 0;
+            background: var(--background);
+            color: var(--text);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-color);
-        }
-
-        .navbar {
-            position: fixed;
-            width: 100%;
-            padding: 1.5rem 2rem;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 100;
         }
 
         .hero {
+            position: relative;
             min-height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-                        url('https://paws.community/static/hero-bg.jpg');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-        }
-
-        .features {
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-card {
-            background: white;
-            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        .feature-card img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
+        .shape {
+            position: absolute;
+            pointer-events: none;
         }
 
-        .feature-card-content {
-            padding: 2rem;
-            text-align: center;
-        }
+        .shape1 { top: 0; left: 0; }
+        .shape2 { top: 20%; right: 0; }
+        .shape3 { bottom: 20%; left: 0; }
+        .shape4 { bottom: 0; right: 0; }
 
-        .cta-button {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 1.2rem 3rem;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 2rem;
-        }
+        /* Rest of your existing styles */
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <img src="https://paws.community/static/logo.svg" alt="PAWS TON" height="40">
-        <div id="ton-connect-button"></div>
-    </nav>
+    <div class="hero">
+        <img src="https://paws.community/_next/static/media/shape1.04e536d7.png" class="shape shape1" alt="">
+        <img src="https://paws.community/_next/static/media/shape2.501939e0.png" class="shape shape2" alt="">
+        <img src="https://paws.community/_next/static/media/shape3.dbfda191.png" class="shape shape3" alt="">
+        <img src="https://paws.community/_next/static/media/shape4.3f7a27ad.png" class="shape shape4" alt="">
+        
+        <!-- Your existing content -->
+    </div>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Welcome to PAWS TON Community</h1>
-            <p>Help animals find their forever homes</p>
-            <button class="cta-button">Get Started</button>
-        </div>
-    </section>
-
-    <section class="features">
-        <div class="feature-card">
-            <img src="https://paws.community/static/adopt-image.jpg" alt="Adopt">
-            <div class="feature-card-content">
-                <h3>Adopt</h3>
-                <p>Find your perfect companion</p>
-            </div>
-        </div>
-        <div class="feature-card">
-            <img src="https://paws.community/static/donate-image.jpg" alt="Donate">
-            <div class="feature-card-content">
-                <h3>Donate</h3>
-                <p>Support with TON</p>
-            </div>
-        </div>
-        <div class="feature-card">
-            <img src="https://paws.community/static/community-image.jpg" alt="Community">
-            <div class="feature-card-content">
-                <h3>Community</h3>
-                <p>Join our pet lovers network</p>
-            </div>
-        </div>
-    </section>
-
-    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
-    <script>
-        const tonConnectUI = new TONConnect.UI({
-            manifestUrl: 'https://hasan199191.github.io/my-ton-app/tonconnect-manifest.json',
-            buttonRootId: 'ton-connect-button'
-        });
-    </script>
+    <!-- Rest of your existing HTML -->
 </body>
 </html>
