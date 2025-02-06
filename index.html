@@ -100,9 +100,11 @@
             font-size: 4rem;
             font-weight: 700;
             margin: 0;
-            background: linear-gradient(45deg, var(--accent-color), #FF8E53);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #FFFFFF;
+            /* Remove gradient background and text fill properties */
+            /*background: linear-gradient(45deg, var(--accent-color), #FF8E53);*/
+            /*-webkit-background-clip: text;*/
+            /*-webkit-text-fill-color: transparent;*/
         }
 
         .subtitle {
@@ -121,6 +123,11 @@
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.2s ease;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            min-width: 200px;
         }
 
         .connect-button:hover {
@@ -150,6 +157,27 @@
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-20px); }
+        }
+
+        #connect-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .main-footer {
+            text-align: center;
+            width: 100%;
+            padding: 1rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-footer p {
+            margin: 0;
+            opacity: 0.8;
         }
     </style>
     <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
