@@ -1,15 +1,14 @@
-my-ton-app/index.html
+app/index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TON Mini App</title>
+    <title>PAWS TON Community</title>
     <style>
         :root {
-            --primary-gradient: linear-gradient(91.53deg, #7074F5 0%, #9181F5 100%);
+            --primary-color: #FF6B6B;
             --text-color: #333;
-            --background: #fff;
         }
 
         * {
@@ -19,139 +18,124 @@ my-ton-app/index.html
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--background);
+            font-family: 'Inter', sans-serif;
             color: var(--text-color);
         }
 
         .navbar {
             position: fixed;
-            top: 0;
             width: 100%;
-            padding: 1rem;
+            padding: 1rem 2rem;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             z-index: 100;
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             align-items: center;
-            padding-right: 2rem;
         }
 
         .hero {
             min-height: 100vh;
+            background: url('./assets/hero-bg.jpg') center/cover;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 2rem;
-            background: url('path-to-your-hero-image.jpg') center/cover;
-            position: relative;
+            color: white;
         }
 
         .hero::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
         }
 
         .hero-content {
             position: relative;
             z-index: 1;
-            color: white;
         }
 
-        .button {
-            padding: 16px 32px;
-            border-radius: 12px;
-            border: none;
-            background: var(--primary-gradient);
-            color: white;
-            font-weight: 600;
-            font-size: 15px;
-            cursor: pointer;
-            transition: opacity 0.2s ease;
-        }
-
-        .button:hover {
-            opacity: 0.9;
-        }
-
-        .services {
+        .features {
             padding: 4rem 2rem;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
+            background: #f8f9fa;
         }
 
-        .service-card {
-            padding: 2rem;
+        .feature-card {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
         }
 
-        .service-card:hover {
+        .feature-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card:hover {
             transform: translateY(-5px);
         }
 
-        .glow {
-            position: fixed;
-            top: -50%;
-            width: 200px;
-            height: 200px;
-            background: var(--primary-gradient);
-            filter: blur(100px);
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        #ton-connect-button {
-            margin-left: auto;
+        .cta-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 2rem;
         }
     </style>
 </head>
 <body>
-    <div class="glow"></div>
-    
     <nav class="navbar">
-        <!-- Add navigation items -->
+        <div class="logo">PAWS TON</div>
+        <div id="ton-connect-button"></div>
     </nav>
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Welcome to TON</h1>
-            <p>Your Gateway to the Future of Digital Assets</p>
-            <button class="button">Get Started</button>
+            <h1>Welcome to PAWS TON Community</h1>
+            <p>Help animals find their forever homes</p>
+            <button class="cta-button">Get Started</button>
         </div>
     </section>
 
-    <section class="services">
-        <!-- Add service cards -->
+    <section class="features">
+        <div class="feature-card">
+            <img src="./assets/adopt.jpg" alt="Adopt">
+            <h3>Adopt</h3>
+            <p>Find your perfect companion</p>
+        </div>
+        <div class="feature-card">
+            <img src="./assets/donate.jpg" alt="Donate">
+            <h3>Donate</h3>
+            <p>Support with TON</p>
+        </div>
+        <div class="feature-card">
+            <img src="./assets/community.jpg" alt="Community">
+            <h3>Community</h3>
+            <p>Join our pet lovers network</p>
+        </div>
     </section>
 
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <script>
-        // Initialize TON Connect
         const tonConnectUI = new TONConnect.UI({
-            manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react/tonconnect-manifest.json',
+            manifestUrl: 'https://hasan199191.github.io/my-ton-app/tonconnect-manifest.json',
             buttonRootId: 'ton-connect-button'
         });
-
-        // Add glow effect movement
-        document.addEventListener('mousemove', (e) => {
-            const glow = document.querySelector('.glow');
-            glow.style.left = e.clientX - 100 + 'px';
-            glow.style.top = e.clientY - 100 + 'px';
-        });
-
-        // Add TON Connect button to navbar
-        const navbar = document.querySelector('.navbar');
-        const connectButton = document.createElement('div');
-        connectButton.id = 'ton-connect-button';
-        navbar.appendChild(connectButton);
     </script>
 </body>
 </html>
