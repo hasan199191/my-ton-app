@@ -263,8 +263,31 @@ function showMessage(message) {
 
 async function handleClaim() {
     try {
-        // İşlem öncesi kullanıcıyı bilgilendir
-        if (!confirm("This transaction will cost 0.247 TON. Do you want to continue?")) {
+        // Create confirmation dialog
+        const dialog = document.createElement('dialog');
+        dialog.className = 'custom-dialog';
+        
+        dialog.innerHTML = `
+            <div class="dialog-content">
+                <p>This transaction will cost 0.247 TON. Do you want to continue?</p>
+                <div class="dialog-buttons">
+                    <button class="confirm-btn" onclick="this.closest('dialog').returnValue='confirm'">Continue</button>
+                    <button class="cancel-btn" onclick="this.closest('dialog').returnValue='cancel'">Cancel</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(dialog);
+        dialog.showModal();
+        
+        const result = await new Promise((resolve) => {
+            dialog.addEventListener('close', () => {
+                resolve(dialog.returnValue);
+                dialog.remove();
+            });
+        });
+
+        if (result !== 'confirm') {
             return;
         }
 
@@ -273,11 +296,9 @@ async function handleClaim() {
             messages: [{
                 address: CONTRACT_ADDRESS,
                 amount: REQUIRED_AMOUNT,
-                payload: 'te6ccgEBAQEABgAACCBpbmNyZW1lbnQ=' // Base64 encoded "increment"
+                payload: 'te6ccgEBAQEABgAACCBpbmNyZW1lbnQ='
             }]
         };
-        
-        console.log('Attempting transaction:', transaction);
         
         try {
             const result = await tonConnect.sendTransaction(transaction);
@@ -285,7 +306,6 @@ async function handleClaim() {
             showMessage('Transaction successful! Thank you for your contribution.');
         } catch (txError) {
             console.error('Transaction error:', txError);
-            // Cüzdan zaten kendi hata mesajını gösterecek
             return;
         }
 
@@ -294,7 +314,6 @@ async function handleClaim() {
         if (error.message?.includes('rejected')) {
             showMessage("Transaction was rejected");
         } else {
-            // Genel hataları göster
             showMessage("Transaction failed. Please try again.");
         }
     }
@@ -304,43 +323,75 @@ async function handleClaim() {
 const style = document.createElement('style');
 style.textContent = `
     .custom-dialog {
-        padding: 15px;
+        padding: 20px;
         background: var(--bg-color);
-        border: 1px solid var(--text-color);
-        border-radius: 8px;
+        border: 2px solid var(--text-color);
+        border-radius: 10px;
         color: var(--text-color);
-        max-width: 280px;  /* Daha küçük maksimum genişlik */
+        max-width: 300px;
         margin: auto;
     }
     
     .dialog-content {
         text-align: center;
-        font-size: 0.9rem;  /* Daha küçük yazı boyutu */
+        font-size: 1rem;
     }
     
     .dialog-content p {
-        margin: 0 0 12px 0;  /* Azaltılmış boşluk */
-        line-height: 1.4;
+        margin: 0 0 15px 0;
+        line-height: 1.5;
     }
     
     .dialog-content button {
         background: var(--bg-color);
         color: var(--text-color);
-        border: 1px solid var(--text-color);
-        padding: 6px 14px;  /* Daha küçük padding */
-        border-radius: 15px;
+        border: 2px solid var(--text-color);
+        padding: 8px 16px;
+        border-radius: 20px;
         cursor: pointer;
-        font-size: 0.8rem;  /* Daha küçük buton yazı boyutu */
-        margin-top: 10px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-top: 12px;
         transition: transform 0.2s ease;
     }
     
     .dialog-content button:hover {
-        transform: translateY(-1px);
+        transform: translateY(-2px);
     }
 
     .custom-dialog::backdrop {
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    .dialog-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .dialog-buttons button {
+        background: var(--bg-color);
+        color: var(--text-color);
+        border: 2px solid var(--text-color);
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: transform 0.2s ease;
+    }
+
+    .dialog-buttons button:hover {
+        transform: translateY(-2px);
+    }
+
+    .confirm-btn {
+        min-width: 100px;
+    }
+
+    .cancel-btn {
+        min-width: 100px;
     }
 `;
 document.head.appendChild(style);
