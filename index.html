@@ -261,7 +261,7 @@ function showMessage(message) {
     });
 }
 
-// Transaction kısmını güncelle
+// Update transaction handling
 async function handleClaim() {
     try {
         if (!tonConnect.connected) {
@@ -269,30 +269,37 @@ async function handleClaim() {
             return;
         }
 
-        // Prepare transaction
+        // Prepare transaction with Base64 encoded payload
         const transaction = {
             validUntil: Math.floor(Date.now() / 1000) + 600,
             messages: [{
                 address: CONTRACT_ADDRESS,
                 amount: REQUIRED_AMOUNT,
-                payload: {
-                    $$type: 'Mint',
-                    query_id: 0n
-                }
+                stateInit: null,
+                payload: 'te6ccgEBAQEABgAACCBJbmNyZW1lbnQ=' // Base64 encoded "Increment"
             }]
         };
 
         claimButton.disabled = true;
         claimButton.textContent = 'Processing...';
 
+        // Send transaction
         const result = await tonConnect.sendTransaction(transaction);
-        console.log('Transaction sent:', result);
+        console.log('Transaction details:', result);
         
-        showMessage(`Transaction sent! View on explorer: https://tonviewer.com/transaction/${result.hash}`);
+        // Show success message with explorer link
+        showMessage(`Transaction sent! View on explorer: https://tonscan.org/transaction/${result.hash}`);
 
     } catch (error) {
-        console.error('Full error:', error);
-        showMessage(error.message || "Transaction failed");
+        console.error('Error details:', error);
+        // More detailed error handling
+        if (error.message?.includes('rejected')) {
+            showMessage("Transaction was rejected by user");
+        } else if (error.message?.includes('balance')) {
+            showMessage("Insufficient balance. You need at least 0.247 TON");
+        } else {
+            showMessage("Transaction failed. Please try again.");
+        }
     } finally {
         claimButton.disabled = false;
         claimButton.textContent = 'Claim Paws';
