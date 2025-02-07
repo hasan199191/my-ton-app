@@ -263,11 +263,8 @@ function showMessage(message) {
 
 async function handleClaim() {
     try {
-        const balance = await tonConnect.getBalance();
-        console.log('Current balance:', balance);
-
-        if (balance < REQUIRED_AMOUNT) {
-            showMessage("Your wallet balance is less than 0.247 TON.\nPlease add more TON to continue.");
+        // İşlem öncesi kullanıcıyı bilgilendir
+        if (!confirm("This transaction will cost 0.247 TON. Do you want to continue?")) {
             return;
         }
 
@@ -276,22 +273,28 @@ async function handleClaim() {
             messages: [{
                 address: CONTRACT_ADDRESS,
                 amount: REQUIRED_AMOUNT,
-                payload: 'increment'  // Sadece 'increment' string olarak gönderiyoruz
+                payload: 'te6ccgEBAQEABgAACCBpbmNyZW1lbnQ=' // Base64 encoded "increment"
             }]
         };
         
-        console.log('Sending transaction:', transaction);
-        const result = await tonConnect.sendTransaction(transaction);
-        console.log('Transaction result:', result);
+        console.log('Attempting transaction:', transaction);
         
-        if (result) {
+        try {
+            const result = await tonConnect.sendTransaction(transaction);
+            console.log('Transaction sent successfully:', result);
             showMessage('Transaction successful! Thank you for your contribution.');
+        } catch (txError) {
+            console.error('Transaction error:', txError);
+            // Cüzdan zaten kendi hata mesajını gösterecek
+            return;
         }
+
     } catch (error) {
-        console.error('Detailed error:', error);
+        console.error('Full error details:', error);
         if (error.message?.includes('rejected')) {
-            showMessage("Transaction was rejected by user");
+            showMessage("Transaction was rejected");
         } else {
+            // Genel hataları göster
             showMessage("Transaction failed. Please try again.");
         }
     }
