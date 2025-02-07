@@ -271,8 +271,8 @@ async function handleClaim() {
             <div class="dialog-content">
                 <p>This transaction will cost 0.247 TON. Do you want to continue?</p>
                 <div class="dialog-buttons">
-                    <button class="confirm-btn" onclick="this.closest('dialog').returnValue='confirm'">Continue</button>
-                    <button class="cancel-btn" onclick="this.closest('dialog').returnValue='cancel'">Cancel</button>
+                    <button class="confirm-btn">Continue</button>
+                    <button class="cancel-btn">Cancel</button>
                 </div>
             </div>
         `;
@@ -281,16 +281,26 @@ async function handleClaim() {
         dialog.showModal();
         
         const result = await new Promise((resolve) => {
-            dialog.addEventListener('close', () => {
-                resolve(dialog.returnValue);
+            const confirmBtn = dialog.querySelector('.confirm-btn');
+            const cancelBtn = dialog.querySelector('.cancel-btn');
+            
+            confirmBtn.addEventListener('click', () => {
                 dialog.remove();
+                resolve('confirm');
+            });
+            
+            cancelBtn.addEventListener('click', () => {
+                dialog.remove();
+                resolve('cancel');
             });
         });
 
+        // If user clicks Cancel, stop here
         if (result !== 'confirm') {
             return;
         }
 
+        // If user confirms, proceed with transaction
         const transaction = {
             validUntil: Math.floor(Date.now() / 1000) + 600,
             messages: [{
@@ -299,15 +309,8 @@ async function handleClaim() {
                 payload: 'te6ccgEBAQEABgAACCBpbmNyZW1lbnQ='
             }]
         };
-        
-        try {
-            const result = await tonConnect.sendTransaction(transaction);
-            console.log('Transaction sent successfully:', result);
-            showMessage('Transaction successful! Thank you for your contribution.');
-        } catch (txError) {
-            console.error('Transaction error:', txError);
-            return;
-        }
+
+        await tonConnect.sendTransaction(transaction);
 
     } catch (error) {
         console.error('Full error details:', error);
