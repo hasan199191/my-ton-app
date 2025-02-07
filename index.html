@@ -7,7 +7,9 @@
 <title>PAWS | Home</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0D0D0D">
-<link rel="icon" href="https://paws.community/favicon.ico">
+<link rel="icon" href="./static/favicon.ico">
+<link rel="icon" type="image/x-icon" href="./static/favicon.ico">
+<link rel="shortcut icon" href="./static/favicon.ico">
 
 <!-- SEO Meta Tags -->
 <meta name="robots" content="index,follow">
@@ -37,8 +39,6 @@
 <meta property="msapplication-config" content="/icons/browserconfig.xml">
 
 <!-- Icons & Manifest -->
-<link rel="icon" href="/favicon.ico">
-<link rel="icon" href="/static/favicon-32x32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="/icons/512.png" sizes="512x512">
 <link rel="manifest" href="/manifest.json">
 
@@ -100,14 +100,11 @@ animation: float 3s ease-in-out infinite;
 font-size: 4rem;
 font-weight: 700;
 margin: 0;
-            background: linear-gradient(45deg, var(--accent-color), #FF8E53);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: #FFFFFF;
-            /* Remove gradient background and text fill properties */
-            /*background: linear-gradient(45deg, var(--accent-color), #FF8E53);*/
-            /*-webkit-background-clip: text;*/
-            /*-webkit-text-fill-color: transparent;*/
+color: #FFFFFF;
+/* Remove the gradient background */
+/*background: linear-gradient(45deg, var(--accent-color), #FF8E53);*/
+/*-webkit-background-clip: text;*/
+/*-webkit-text-fill-color: transparent;*/
 }
 
 .subtitle {
@@ -238,3 +235,4 @@ console.error('Transaction failed:', e);
 });
 </script>
 </body>
+</html>
