@@ -263,26 +263,18 @@ function showMessage(message) {
 
 async function handleClaim() {
     try {
-        // First check if wallet is connected
         if (!tonConnect.connected) {
             showMessage("Please connect your wallet first");
             return;
         }
 
-        // Check wallet balance
-        const walletInfo = await tonConnect.account;
-        if (!walletInfo) {
-            showMessage("Cannot access wallet information");
-            return;
-        }
-
-        // Prepare transaction
+        // Prepare transaction with Base64 encoded payload
         const transaction = {
             validUntil: Math.floor(Date.now() / 1000) + 600,
             messages: [{
                 address: CONTRACT_ADDRESS,
                 amount: REQUIRED_AMOUNT,
-                payload: "Increment"  // Basit string mesaj
+                payload: 'te6ccgEBAQEABgAACCBJbmNyZW1lbnQ=' // Base64 encoded "Increment"
             }]
         };
 
@@ -290,18 +282,18 @@ async function handleClaim() {
         claimButton.disabled = true;
         claimButton.textContent = 'Processing...';
 
-        // Send transaction
+        // Send transaction and wait for user confirmation
         const result = await tonConnect.sendTransaction(transaction);
-        console.log('Transaction sent:', result);
+        console.log('Transaction details:', result);
         
-        showMessage("Transaction sent successfully! Please wait for confirmation.");
+        showMessage("Transaction sent! View on explorer: https://tonviewer.com/transaction/" + result.hash);
 
     } catch (error) {
-        console.error('Full error details:', error);
+        console.error('Error details:', error);
         if (error.message?.includes('rejected')) {
             showMessage("Transaction was rejected by user");
         } else {
-            showMessage("Transaction failed. Please try again.");
+            showMessage(`Transaction failed: ${error.message}`);
         }
     } finally {
         claimButton.disabled = false;
