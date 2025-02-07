@@ -241,7 +241,7 @@ tonConnect.onStatusChange(async (wallet) => {
     }
 });
 
-// Create custom dialog function
+// Fix showMessage function syntax
 function showMessage(message) {
     const dialog = document.createElement('dialog');
     dialog.className = 'custom-dialog';
@@ -259,7 +259,7 @@ function showMessage(message) {
     dialog.addEventListener('close', () => {
         dialog.remove();
     });
-});
+} // Removed extra parenthesis
 
 // Add confirmation dialog function
 function showConfirmDialog(title, message) {
