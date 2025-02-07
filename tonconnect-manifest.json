@@ -1,5 +1,7 @@
 {
     "url": "https://hasan199191.github.io/my-ton-app/",
-    "name": "TON Counter DApp",
-    "iconUrl": "https://hasan199191.github.io/my-ton-app/assets/icon.png"
+    "name": "TON Counter",
+    "iconUrl": "https://hasan199191.github.io/my-ton-app/icon.png",
+    "termsOfUseUrl": "https://hasan199191.github.io/my-ton-app/terms.html",
+    "privacyPolicyUrl": "https://hasan199191.github.io/my-ton-app/privacy.html"
 }
