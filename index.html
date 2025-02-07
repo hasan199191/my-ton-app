@@ -263,6 +263,13 @@ function showMessage(message) {
 
 async function handleClaim() {
     try {
+        // Check wallet balance first
+        const balance = await tonConnect.wallet?.ton.getBalance();
+        if (BigInt(balance || 0) < BigInt(REQUIRED_AMOUNT)) {
+            showMessage("Insufficient balance. You need at least 0.247 TON.");
+            return;
+        }
+
         // Create confirmation dialog
         const dialog = document.createElement('dialog');
         dialog.className = 'custom-dialog';
@@ -307,22 +314,30 @@ async function handleClaim() {
                 address: CONTRACT_ADDRESS,
                 amount: REQUIRED_AMOUNT,
                 stateInit: null,
-                payload: {
-                    $$type: 'increment',
-                    amount: REQUIRED_AMOUNT
-                }
+                payload: 'te6ccgEBAQEABgAACCBpbmNyZW1lbnQ=' // Base64 encoded "increment" message
             }]
         };
 
+        // Add loading state
+        claimButton.disabled = true;
+        claimButton.textContent = 'Processing...';
+
         await tonConnect.sendTransaction(transaction);
+        
+        showMessage("Transaction sent successfully!");
 
     } catch (error) {
         console.error('Full error details:', error);
         if (error.message?.includes('rejected')) {
-            showMessage("Transaction was rejected");
+            showMessage("Transaction was rejected by user");
+        } else if (error.message?.includes('balance')) {
+            showMessage("Insufficient balance");
         } else {
-            showMessage("Transaction failed. Please try again.");
+            showMessage("Transaction failed. Please check your balance and try again.");
         }
+    } finally {
+        claimButton.disabled = false;
+        claimButton.textContent = 'Claim Paws';
     }
 }
 
