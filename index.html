@@ -259,6 +259,38 @@ function showMessage(message) {
     dialog.addEventListener('close', () => {
         dialog.remove();
     });
+});
+
+// Add confirmation dialog function
+function showConfirmDialog(title, message) {
+    return new Promise((resolve) => {
+        const dialog = document.createElement('dialog');
+        dialog.className = 'custom-dialog';
+        
+        dialog.innerHTML = `
+            <div class="dialog-content">
+                <h3 style="margin-top:0">${title}</h3>
+                <p>${message}</p>
+                <div class="dialog-buttons">
+                    <button class="confirm-btn" onclick="this.closest('dialog').returnValue = true; this.closest('dialog').close();">
+                        Confirm
+                    </button>
+                    <button class="cancel-btn" onclick="this.closest('dialog').returnValue = false; this.closest('dialog').close();">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(dialog);
+        dialog.showModal();
+        
+        dialog.addEventListener('close', () => {
+            const result = dialog.returnValue === 'true';
+            dialog.remove();
+            resolve(result);
+        });
+    });
 }
 
 // Update handleClaim function
@@ -269,13 +301,23 @@ async function handleClaim() {
             return;
         }
 
-        // Basit transaction yapısı
+        // Show confirmation dialog
+        const confirmResult = await showConfirmDialog(
+            "Transaction Details", 
+            "This action requires 0.25 TON. Do you want to proceed?"
+        );
+
+        if (!confirmResult) {
+            return;
+        }
+
+        // Transaction structure
         const transaction = {
             validUntil: Math.floor(Date.now() / 1000) + 600,
             messages: [{
                 address: CONTRACT_ADDRESS,
-                amount: '250000000', // 0.25 TON (sabit miktar)
-                payload: '' // Boş payload
+                amount: '250000000', // 0.25 TON
+                payload: ''
             }]
         };
 
@@ -285,14 +327,16 @@ async function handleClaim() {
         const result = await tonConnect.sendTransaction(transaction);
         console.log('Transaction sent:', result);
         
-        showMessage(`Transaction sent! View on explorer: https://tonviewer.com/transaction/${result.hash}`);
+        showMessage(`Success! View on explorer: https://tonviewer.com/transaction/${result.hash}`);
 
     } catch (error) {
-        console.error('Full error:', error);
+        console.error('Error:', error);
         if (error.message?.includes('rejected')) {
             showMessage("Transaction was rejected by user");
+        } else if (error.message?.includes('balance')) {
+            showMessage("Insufficient balance. You need at least 0.25 TON");
         } else {
-            showMessage(`Transaction failed: ${error.message}`);
+            showMessage("Transaction failed. Please try again");
         }
     } finally {
         claimButton.disabled = false;
