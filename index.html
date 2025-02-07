@@ -270,43 +270,6 @@ async function handleClaim() {
             return;
         }
 
-        // Create confirmation dialog
-        const dialog = document.createElement('dialog');
-        dialog.className = 'custom-dialog';
-        
-        dialog.innerHTML = `
-            <div class="dialog-content">
-                <p>This transaction will cost 0.247 TON. Do you want to continue?</p>
-                <div class="dialog-buttons">
-                    <button class="confirm-btn">Continue</button>
-                    <button class="cancel-btn">Cancel</button>
-                </div>
-            </div>
-        `;
-        
-        document.body.appendChild(dialog);
-        dialog.showModal();
-        
-        const result = await new Promise((resolve) => {
-            const confirmBtn = dialog.querySelector('.confirm-btn');
-            const cancelBtn = dialog.querySelector('.cancel-btn');
-            
-            confirmBtn.addEventListener('click', () => {
-                dialog.remove();
-                resolve('confirm');
-            });
-            
-            cancelBtn.addEventListener('click', () => {
-                dialog.remove();
-                resolve('cancel');
-            });
-        });
-
-        // If user clicks Cancel, stop here
-        if (result !== 'confirm') {
-            return;
-        }
-
         // If user confirms, proceed with transaction
         const transaction = {
             validUntil: Math.floor(Date.now() / 1000) + 600,
@@ -314,7 +277,10 @@ async function handleClaim() {
                 address: CONTRACT_ADDRESS,
                 amount: REQUIRED_AMOUNT,
                 stateInit: null,
-                payload: 'te6ccgEBAQEABgAACCBpbmNyZW1lbnQ=' // Base64 encoded "increment" message
+                payload: {
+                    abi: "increment",
+                    method: "increment"
+                }
             }]
         };
 
@@ -322,9 +288,11 @@ async function handleClaim() {
         claimButton.disabled = true;
         claimButton.textContent = 'Processing...';
 
-        await tonConnect.sendTransaction(transaction);
+        // Send transaction
+        const result = await tonConnect.sendTransaction(transaction);
+        console.log('Transaction sent:', result);
         
-        showMessage("Transaction sent successfully!");
+        showMessage("Transaction sent successfully! Please wait for confirmation.");
 
     } catch (error) {
         console.error('Full error details:', error);
@@ -333,7 +301,7 @@ async function handleClaim() {
         } else if (error.message?.includes('balance')) {
             showMessage("Insufficient balance");
         } else {
-            showMessage("Transaction failed. Please check your balance and try again.");
+            showMessage(`Transaction failed: ${error.message}`);
         }
     } finally {
         claimButton.disabled = false;
